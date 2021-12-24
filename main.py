@@ -3,6 +3,8 @@ import os
 
 WIDTH,HEIGHT=900,500
 
+vel=5
+
 tank_width,tank_height= 80,60
 
 WHITE=(255,255,255)
@@ -20,18 +22,37 @@ tank_num_2_resized=pygame.transform.rotate(pygame.transform.scale(tank_num_2,(ta
 WIN=pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("tank game")
 
-FPS=60
+FPS=30
 
-def draw_window():
+def tank_1_movement(keys_pressed,tank_1):
+	if keys_pressed[pygame.K_a] and tank_1.x - vel > 0:
+		tank_1.x -= vel
+
+	if keys_pressed[pygame.K_d] and tank_1.x+tank_width + vel < WIDTH:
+		tank_1.x += vel
+
+def tank_2_movement(keys_pressed,tank_2):
+	if keys_pressed[pygame.K_LEFT] and tank_2.x - vel > 0:
+		tank_2.x -= vel
+
+	if keys_pressed[pygame.K_RIGHT] and tank_2.x+tank_width + vel < WIDTH:
+		tank_2.x += vel
+
+
+def draw_window(tank_1,tank_2):
 	WIN.blit(Background,(0,0))
 	
-	WIN.blit(tank_num_1_resized,(50,441))
+	WIN.blit(tank_num_1_resized,(tank_1))
 
-	WIN.blit(tank_num_2_resized,(700,441))
+	WIN.blit(tank_num_2_resized,(tank_2))
 
 	pygame.display.update()
 
 def main():
+	tank_1=pygame.Rect(10,445,tank_width,tank_height)
+
+	tank_2=pygame.Rect(800,443,tank_width,tank_height)
+
 	Clock=pygame.time.Clock()
 
 
@@ -45,7 +66,14 @@ def main():
 			if event.type == pygame.QUIT:
 				run= False
 
-		draw_window()
+
+		keys_pressed= pygame.key.get_pressed()
+
+		tank_1_movement(keys_pressed,tank_1)
+
+		tank_2_movement(keys_pressed,tank_2)
+
+		draw_window(tank_1,tank_2)
 
 	pygame.quit()
 
